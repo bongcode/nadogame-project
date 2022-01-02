@@ -1,6 +1,4 @@
 import pygame
-from pygame import key 
-from pygame.constants import K_RIGHT
 
 ################################################################################
 

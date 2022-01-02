@@ -1,3 +1,19 @@
+# quiz) 하늘에서 떨어지는 똥 피하는 게임을 만드시오
+
+#게임조건
+#1. 캐릭터는 가장 아래에 위치, 좌우로만 이동가능
+#2. 똥은 화면 가장위에서 떨어짐. x좌표는 매번 랜덤으로 설정
+#3. 캐릭터가 똥을 피하면 다음 똥이 다시떨어짐
+#4. 캐릭터가 똥과 충돌하면 "게임종료"
+#5. FPS는 30으로 고정
+
+#게임 이미지
+#1. 배경: 640 * 480 - background.png
+#2. 캐릭터: 70 * 70 - character.png
+#3. 똥: 70 * 70 - enemy.png
+
+
+import random
 import pygame
 #from pygame import key
 #from pygame.constants import K_RIGHT
@@ -37,14 +53,14 @@ to_y = 0
 character_speed = 0.6
 
 
-# 적 캐릭터
-enemy = pygame.image.load("/Users/songbong-geun/Desktop/pythonworkspace/pygame_basic/enemy.png")
-enemy_size = enemy.get_rect().size # 이미지의 크기를 구해옴
-enemy_width = enemy_size[0] # 캐릭터의 가로크기
-enemy_height = enemy_size[1] # 캐릭터의 세로크기
-enemy_x_pos = (screen_width / 2) - (enemy_width / 2) # 화면 가로의 절반크기에 해당하는 곳에 위치
-enemy_y_pos = (screen_height / 2) - (enemy_height / 2) # 화면 세로의 크기 가장 아래에 해당하는 곳에 위치
-
+# 똥 만들기
+ddong = pygame.image.load("/Users/songbong-geun/Desktop/pythonworkspace/pygame_basic/enemy.png")
+ddong_size = ddong.get_rect().size # 이미지의 크기를 구해옴
+ddong_width = ddong_size[0] # 캐릭터의 가로크기
+ddong_height = ddong_size[1] # 캐릭터의 세로크기
+ddong_x_pos = random.randint(0, screen_width - ddong_width)
+ddong_y_pos = 0
+ddong_speed = 10
 
 # 폰트 정의
 game_font = pygame.font.Font(None, 40)  # 폰트 객체 생성(폰트, 크기)
@@ -100,25 +116,32 @@ while running:
     elif charcter_y_pos > screen_height - character_height:
         charcter_y_pos = screen_height - character_height
 
+    ddong_y_pos += ddong_speed
+
+    if ddong_y_pos > screen_height:
+        ddong_y_pos = 0
+        ddong_x_pos = random.randint(0, screen_width - ddong_width)
+        
+
 
     # 충돌처리를 위한 rect 정보 업데이트
     character_rect = character.get_rect()
     character_rect.left = character_x_pos
     character_rect.top = charcter_y_pos
 
-    enemy_rect = enemy.get_rect()
-    enemy_rect.left = enemy_x_pos
-    enemy_rect.top = enemy_y_pos
+    ddong_rect = ddong.get_rect()
+    ddong_rect.left = ddong_x_pos
+    ddong_rect.top = ddong_y_pos
 
     # 충돌체크
-    if character_rect.colliderect(enemy_rect):
+    if character_rect.colliderect(ddong_rect):
         print("충돌했어요") 
         running = False
 
 
     screen.blit(background, (0, 0)) # 배경 이미지를 불러와서 그리기
     screen.blit(character, (character_x_pos, charcter_y_pos)) # 캐릭터 그리기
-    screen.blit(enemy, (enemy_x_pos, enemy_y_pos)) # 적 그리기 
+    screen.blit(ddong, (ddong_x_pos, ddong_y_pos)) # 적 그리기 
 
 
     # 타이머 집어넣기
@@ -145,3 +168,4 @@ while running:
 
 # pygame 종료
 pygame.quit()
+

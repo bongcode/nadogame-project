@@ -245,6 +245,11 @@ while running:
         del weapons[weapon_to_remove]
         weapon_to_remove = -1
 
+    # 모든 공이 없어질 경우 게임 종료(성공)
+    if len(balls) == 0:
+        game_result = "Mission Complete"
+        running = False
+        
 
   
     # 5. 화면에 그리기(작성한 순서에 따라서 표시됨 / 배경-무대-캐릭터-무기 순이면 해당과 같이 pygame에서는 인식함)
